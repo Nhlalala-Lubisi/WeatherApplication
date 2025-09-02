@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body 
+    class="
+        {% if image_url and exception_occurred == False %}
+            dynamic-bg
+        {% else %}
+            default-bg
+        {% endif %}
+    "
+    {% if image_url and exception_occurred == False %}
+        data-bg="{{ image_url }}"
+    {% endif %}
+>
+    <div class="container">
+        <div class="header">
+            <h1>Weather</h1>
+        </div>
+
+        <form method="POST" class="search-form">
+            {% csrf_token %}
+            <i class="fas fa-search"></i>
+            <input type="text" name="city" placeholder="Enter city name" value="{{ city }}">
+            <button type="submit"><i class="fas fa-arrow-right"></i></button>
+        </form>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% else %}
+            <div class="weather-card">
+                <div class="weather-content">
+                    <div class="left-panel">
+                        <div class="temperature">{{ temp }}°C</div>
+                        <div class="city-name">{{ city }}</div>
+                    </div>
+
+                    <div class="right-panel">
+                        <div class="icon">
+                            <img src="http://openweathermap.org/img/w/{{ icon }}.png" alt="Weather Icon" class="weather-icon">
+                        </div>
+                        <div class="condition">{{ description }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="date">{{ day }}</div>
+        {% endif %}
+
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
